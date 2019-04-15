@@ -1,20 +1,23 @@
 package main
 
 import (
-	"fmt"
-	"log"
 	"net/http"
+
+	"github.com/labstack/echo"
+	"github.com/labstack/echo/middleware"
 )
 
 func main() {
-	http.HandleFunc("/", func(writer http.ResponseWriter, request *http.Request) {
-		//noinspection GoUnhandledErrorResult
-		fmt.Fprintf(writer, "Hello")
+	e := echo.New()
+	e.Use(middleware.Recover())
+	e.Use(middleware.Logger())
+
+	e.GET("/", func(c echo.Context) error {
+		return c.JSON(http.StatusOK, "Hello")
 	})
-	http.HandleFunc("/health", func(writer http.ResponseWriter, request *http.Request) {
-		//noinspection GoUnhandledErrorResult
-		fmt.Fprintf(writer, "ok")
+	e.GET("/health", func(c echo.Context) error {
+		return c.String(http.StatusOK, "ok")
 	})
 
-	log.Fatal(http.ListenAndServe(":8000", nil))
+	e.Logger.Fatal(e.Start(":8000"))
 }
