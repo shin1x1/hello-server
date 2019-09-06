@@ -1,0 +1,15 @@
+version: '3'
+services:
+  db:
+    image: postgres:11-alpine
+    environment:
+      - POSTGRES_USER=app
+      - POSTGRES_PASSWORD=pass
+      - POSTGRES_DB=app
+      - LC_ALL=ja_JP.UTF-8
+    ports:
+      - "15432:5432"
+  redis:
+    image: redis:5
+    ports:
+      - "16379:6379"
